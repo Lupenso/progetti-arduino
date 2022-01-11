@@ -1,0 +1,36 @@
+int Blu = A3;
+int Rosso = A1;
+int Verde = A2;
+
+int pinBottone = A0;
+
+void RGBcolor (int red, int green, int blue) {
+  analogWrite(Rosso, red);
+  analogWrite(Verde, green);
+  analogWrite(Blu, blue);
+}
+void primofunzionamento () {
+  RGBcolor(255,0,0);
+  delay (10000);
+  RGBcolor(255,255,0);
+  delay (5000);
+  RGBcolor(0,255,0);
+  delay (10000);
+}
+  
+  
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(pinBottone, INPUT);
+  
+  pinMode(Blu, OUTPUT);
+  pinMode(Rosso, OUTPUT);
+  pinMode(Verde, OUTPUT);
+
+}
+bielo biw
+void loop() {
+  // put your main code here, to run repeatedly:
+  primofunzionamento ();
+}
