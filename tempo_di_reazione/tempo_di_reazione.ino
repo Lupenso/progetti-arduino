@@ -2,7 +2,7 @@
 int pinLed = 6;
 int pinBottone = 9;
 long tempoDiReazione = 0;
-
+ 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -10,14 +10,13 @@ void setup() {
   pinMode(pinLed, OUTPUT);
   randomSeed(10469);
 }
-
+ 
 void loop() {
   // put your main code here, to run repeatedly:
   trovaReazione();
 }
-
+ 
 void trovaReazione() {
-  int nulla;
   int tempoAccensionepinLed = random(1000, 3000);
   delay(tempoAccensionepinLed);
   digitalWrite(pinLed, 1);
@@ -32,5 +31,18 @@ void trovaReazione() {
   Serial.print("Ci hai messo: ");
   Serial.print(tempoDiReazione);
   Serial.println(" Millisecondi!");
+  
+  if (tempoDiReazione >= 1000) {
+    Serial.println("Sei un bottazzo");
+  } else if (tempoDiReazione >= 300) {
+    Serial.println("Sei mediocre");
+  } else if (tempoDiReazione >= 200) {
+    Serial.println("Sei buono");
+  } else if (tempoDiReazione >= 100) {
+    Serial.println("Sei un pro player di fortnite");
+  } else if (tempoDiReazione <= 10) {
+    Serial.println("Sei un cheater");
+  }
+ 
   tempoDiReazione = 0;
 }
