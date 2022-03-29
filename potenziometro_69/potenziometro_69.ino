@@ -1,21 +1,30 @@
 int potenzio = A0;
 int valoreP = 0;
-int ledVerde = 4;
+int pinVerde = 3;
+int pinRosso = 6;
+int pinBlu = 9;
+int intensita;
+char colore;
+
 void setup() {
   Serial.begin(9600);
-  pinMode (ledVerde, OUTPUT);
+  pinMode(pinRosso, OUTPUT);
+  pinMode(pinVerde, OUTPUT);
+  pinMode(pinBlu, OUTPUT);
+  pinMode(potenzio, INPUT);
+  Serial.println("Scegli il colore");
 }
 
 void loop() {
-  valoreP = analogRead(potenzio);
-  Serial.print( "il valore del potenziometro è: ");
-  Serial.println(valoreP);
-  delay(1000);
-  if (valoreP == 69) {
-    digitalWrite(ledVerde, HIGH);
+  if (Serial.available()) {
+    colore = Serial.read();
+    delay(400);
   }
-
-  else {
-    digitalWrite (ledVerde, LOW);
+  if (colore == 'R') {
+    analogWrite(pinRosso, 255);
+  } else if (colore == 'B') {
+    analogWrite(pinBlu, 255);
+  } else if (colore == 'G') {
+    analogWrite(pinVerde, 255);
   }
 }
