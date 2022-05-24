@@ -1,5 +1,7 @@
+// includo la libreria per usare le note
 #include "pitches.h"
 
+// Dichiaro diverse variabili
 int pinLedRosso = 13;
 int pinLedVerde = 12;
 int pinBuzzer = 2;
@@ -11,17 +13,21 @@ bool haChiavePorta3 = false;
 
 void setup()
 {
-
+  // Inizializzo il serial monitor
   Serial.begin(9600);
 
   pinMode(pinLedRosso, OUTPUT);
   pinMode(pinLedVerde, OUTPUT);
   pinMode(pinBuzzer, OUTPUT);
 
+  // Inzio spiegando la storia
   Serial.println("Ti ritrovi in una stanza, ma non ti ricordi come ci sei arrivato.\nDavanti a te ci sono 3 porte,\ncon una con la scritta libertà");
+  // Chiamo la funzione drawDoor con argomento 0 (tutte le porte chiuse)
   drawDoor("0");
 
+// Inizio un label
 scegliPorta:
+  // Semplice logica per la scelta della porta + controllo che l'utente abbia le chiavi 
   Serial.println("Quale porta scegli?");
   sceltaPorta = leggiRisposta();
   if (sceltaPorta == "1\n") {
@@ -70,6 +76,7 @@ void illuminaLed(int luceDaIlluminare, int luceDaSpegnere) {
   }
 }
 
+// Funzione che legge l'input dell'utente quando serve e lo ritorna
 String leggiRisposta() {
   while (Serial.available() == 0) {
 
@@ -78,11 +85,13 @@ String leggiRisposta() {
   return x;
 }
 
+// Funzione per tutta la logica della prima porta
 void primaPorta()
 {
   Serial.println("Hai scelto la porta uno e riesci ad aprirla");
   drawDoor("1");
 
+  // Illumina il led
   illuminaLed(pinLedVerde, pinLedRosso);
   delay(500);
   illuminaLed(0, pinLedVerde);
@@ -99,6 +108,7 @@ sceltaData:
   String sceltaData = leggiRisposta();
   if (sceltaData != "b\n") {
     Serial.println("Hai sbagliato, ritenta");
+    // Illumina il led + fai un suono
     illuminaLed(pinLedRosso, pinLedVerde);
     playSound(2);
     illuminaLed(0, pinLedRosso);
@@ -106,6 +116,7 @@ sceltaData:
   } else {
     Serial.println("Bravo, hai scelto saggamente e hai trovato un scintillante chiave nella scatola");
     haChiavePorta2 = true;
+    // Illumina il led + fai un suono
     illuminaLed(pinLedVerde, pinLedRosso);
     playSound(1);
     illuminaLed(0, pinLedVerde);
@@ -114,11 +125,13 @@ sceltaData:
   }
 }
 
+// funzione che trattiene tutta la logica per la seconda porta
 void secondaPorta()
 {
   Serial.println("Grazie alla chiave che hai ritrovato apri anche la seconda porta");
   drawDoor("2");
 
+  // Illumina il led
   illuminaLed(pinLedVerde, pinLedRosso);
   delay(500);
   illuminaLed(0, pinLedVerde);
@@ -139,6 +152,7 @@ sceltaCapitale:
   String sceltaCapitale = leggiRisposta();
   if (sceltaCapitale != "c\n") {
     Serial.println("Hai sbagliato, ritenta");
+    // Illumina il led + fai un suono
     illuminaLed(pinLedRosso, pinLedVerde);
     playSound(2);
     illuminaLed(0, pinLedRosso);
@@ -146,6 +160,7 @@ sceltaCapitale:
   } else {
     Serial.println("Bravo, hai scelto saggamente e hai trovato un scintillante chiave nella teca");
     haChiavePorta3 = true;
+    // Illumina il led + fai un suono
     illuminaLed(pinLedVerde, pinLedRosso);
     playSound(1);
     illuminaLed(0, pinLedVerde);
@@ -154,6 +169,7 @@ sceltaCapitale:
   }
 }
 
+// funzione che contiene tutta la logica per la terza porta
 void terzaPorta()
 {
   Serial.println("Grazie alla chiave che hai ritrovato apri anche la terza porta\n");
@@ -163,6 +179,7 @@ void terzaPorta()
   Serial.println("La porta alle tue spalle si chiude per sempre\n");
   drawDoor("ff");
   Serial.println("Sei finalmente libero");
+  // Illumina il led + fai un suono
   illuminaLed(pinLedVerde, pinLedRosso);
   playSound(1);
   illuminaLed(0, pinLedVerde);
@@ -171,9 +188,10 @@ void terzaPorta()
 
 
 
-
+// Una funzione che permette di stampare a schermo le porte 
 void drawDoor(String qualeAprire) {
 
+  // tutte le porte chiuse
   if (qualeAprire == "0") {
     Serial.println(R"(
      %%%%%%%%%%%%%%%%(            %%%%%%%%%%%%%%%%(        #%%%%%%%%%%%%%%(%(   
@@ -194,7 +212,7 @@ void drawDoor(String qualeAprire) {
       )");
   }
 
-
+  // una porta aperta
   if (qualeAprire == "1") {
     Serial.println(R"(
      %%%%%%%%%%%%%%%%%%        #%%%%%%%%%%%%%%%%%         %%%%%%%%%%%%%%#%(     
@@ -216,7 +234,7 @@ void drawDoor(String qualeAprire) {
       )");
   }
 
-
+  // due porte aperte
   if (qualeAprire == "2") {
     Serial.println(R"(
            %                           %                  %%%%%%%%%%%%%%#%(     
@@ -236,7 +254,7 @@ void drawDoor(String qualeAprire) {
       ....,%.                     ....,&.                ,%#*************%%.   
       )");
   }
-
+  // tutte le porte aperte
   if (qualeAprire == "3") {
     Serial.println(R"(
                 %                                                                    
@@ -258,6 +276,7 @@ void drawDoor(String qualeAprire) {
       )");
   }
 
+  // Solo una porta chiusa
   if (qualeAprire == "ff") {
     Serial.println(R"(
       #%%%%%%%%%%%%%%(%(   
@@ -280,7 +299,9 @@ void drawDoor(String qualeAprire) {
 
 }
 
+// funzione che permette di suonare due tipi di suoni diversi, in base agli argomenti
 void playSound(int sceltaSuono) {
+  // Suona il suono della vittoria
   if (sceltaSuono == 1) {
     tone(2, NOTE_E6, 125);
     delay(130);
@@ -296,6 +317,7 @@ void playSound(int sceltaSuono) {
     delay(125);
     noTone(2);
   }
+  // Fai partire il suono della sconfitta
   if (sceltaSuono == 2) {
     tone(2, NOTE_GS5, 100);
     delay(300);
